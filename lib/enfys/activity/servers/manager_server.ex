@@ -9,9 +9,14 @@ defmodule Enfys.Activity.ManagerServer do
   @interval_ms 500
 
   @counts [
-    {:lobby_host, 2, {Activity.LobbyHostServer, %{}}},
-    # lobby_joiner: 5,
-    # lobby_chatter: 3
+    # {:lobby_host, 2, {Activity.LobbyHostServer, %{}}},
+    {:lobby_host_kicker, 1, {Activity.LobbyHostServer, %{
+      name_format: "LobbyHostServer.kicker:{{index}}",
+      flags: [:kicker]
+    }}},
+    {:lobby_joiner, 2, {Activity.LobbyJoinerServer, %{}}},
+    # {:lobby_chatter, 2, {Activity.LobbyChatterServer, %{}}},
+    {:inout, 2, {Activity.InOutServer, %{}}},
   ]
 
   defmodule State do
@@ -42,9 +47,11 @@ defmodule Enfys.Activity.ManagerServer do
   end
 
   @impl GenServer
-  def handle_cast({:register_agent, type}, state) do
+  def handle_cast({:register_agent, type, name}, state) do
     c = Map.get(state.counts, type, 0)
     new_counts = Map.put(state.counts, type, c + 1)
+
+    Logger.info("Started agent #{name}")
 
     {:noreply, struct(state, %{counts: new_counts})}
   end

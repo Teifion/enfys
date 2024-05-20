@@ -43,10 +43,8 @@ defmodule Enfys.Load.ManagerServer do
 
   @impl GenServer
   def handle_info(:startup, state) do
-    if Application.get_env(:enfys, :mode) != :test do
-      send(self(), :tick)
-      :timer.send_interval(@interval_ms, :tick)
-    end
+    send(self(), :tick)
+    :timer.send_interval(@interval_ms, :tick)
 
     {:noreply, state}
   end
