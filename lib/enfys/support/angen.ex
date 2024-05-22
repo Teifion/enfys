@@ -12,7 +12,7 @@ defmodule Enfys.Support.Angen do
 
       {:error, reason} ->
         Logger.error(reason)
-        IO.puts "Use -s to skip the check"
+        IO.puts "Use 'mix enfys.activity skip-check' to skip the check"
         :timer.sleep(100)
         System.halt()
     end
@@ -25,7 +25,12 @@ defmodule Enfys.Support.Angen do
     host = Application.get_env(:enfys, :site_host)
     port = Application.get_env(:enfys, :site_port)
 
-    with {:ok, conn} <- Mint.HTTP.connect(:http, host, port),
+    connection_result = case host do
+      "localhost" -> Mint.HTTP.connect(:http, host, port)
+      _ -> Mint.HTTP.connect(:https, host, port)
+    end
+
+    with {:ok, conn} <- connection_result,
       {:ok, conn, _request_ref} <- Mint.HTTP.request(conn, "POST", "/api/enfys/start", [], nil)
       do
         receive do

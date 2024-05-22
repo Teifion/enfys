@@ -27,6 +27,7 @@ defmodule Enfys.MixProject do
       {:thousand_island, "~> 1.3"},
       {:mint, "~> 1.5"},
       {:jason, "~> 1.2"},
+      {:castore, "~> 1.0"}
     ]
   end
 
