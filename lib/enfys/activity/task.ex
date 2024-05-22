@@ -9,10 +9,14 @@ defmodule Mix.Tasks.Enfys.Activity do
 
   @impl Mix.Task
   @spec run(any()) :: nil
-  def run(_raw_args) do
+  def run(raw_args) do
     Mix.Task.run("app.start")
 
-    _data = Angen.check_is_up()
+    if Enum.member?(raw_args, "-s") do
+      IO.puts "Skipping check"
+    else
+      _data = Angen.check_is_up()
+    end
 
     DynamicSupervisor.start_child(Enfys.ActivitySupervisor, {
       Enfys.Activity.ManagerServer,

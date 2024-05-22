@@ -12,6 +12,7 @@ defmodule Enfys.Support.Angen do
 
       {:error, reason} ->
         Logger.error(reason)
+        IO.puts "Use -s to skip the check"
         :timer.sleep(100)
         System.halt()
     end
