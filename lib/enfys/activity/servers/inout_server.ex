@@ -32,7 +32,7 @@ defmodule Enfys.Activity.InOutServer do
 
     state = %State{
       socket: Socket.new(),
-      name: name,
+      name: name <> Application.get_env(:enfys, :salt, ""),
       mode: :ready,
       user_id: nil
     }

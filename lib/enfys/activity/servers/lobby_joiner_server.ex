@@ -31,7 +31,7 @@ defmodule Enfys.Activity.LobbyJoinerServer do
     state = %State{
       socket: Socket.new(),
       server_id: opts.id,
-      name: name,
+      name: name <> Application.get_env(:enfys, :salt, ""),
       flags: Map.get(opts, :flags, []),
       user_id: nil,
       lobby_id: nil,

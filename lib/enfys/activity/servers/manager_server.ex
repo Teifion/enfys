@@ -60,6 +60,7 @@ defmodule Enfys.Activity.ManagerServer do
   def handle_info(:tick, state) do
     @counts
     |> Enum.filter(fn {key, target, _} ->
+      target = target * Application.get_env(:enfys, :scale, 1)
       current = Map.get(state.counts, key, 0)
       current < target
     end)

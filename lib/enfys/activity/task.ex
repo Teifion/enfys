@@ -8,7 +8,7 @@ defmodule Mix.Tasks.Enfys.Activity do
   mix enfys.activity socket_host:127.0.0.1 socket_port:8201 site_host:localhost site_port:4000 user_password:password
 
   # Remote node example
-  mix enfys.activity socket_host:node1.domain.co.uk socket_port:8201 site_host:node1.domain.co.uk site_port:443 user_password:password
+  mix enfys.activity socket_host:node1.domain.co.uk socket_port:8201 site_host:node1.domain.co.uk site_port:443 user_password:password scale:1 salt:salt
   """
 
   use Mix.Task
@@ -37,6 +37,13 @@ defmodule Mix.Tasks.Enfys.Activity do
 
       "user_password:" <> user_password ->
         Application.put_env(:enfys, :user_password, user_password)
+
+      "scale:" <> scale_str ->
+        scale = String.to_integer(scale_str)
+        Application.put_env(:enfys, :scale, scale)
+
+      "salt:" <> salt ->
+        Application.put_env(:enfys, :salt, salt)
     end)
 
     if Enum.member?(raw_args, "skip-check") do
